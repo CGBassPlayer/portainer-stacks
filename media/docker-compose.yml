@@ -1,0 +1,152 @@
+version: "3.9"
+
+services:
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: mediafilebrowser
+    restart: unless-stopped
+    environment:
+      - PUID
+      - PGID
+    volumes:
+      - /mnt/media:/srv
+      - /docker/filebrowser/filebrowser.db:/database.db
+    ports:
+      - 3600:80
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:prowlarr
+      - TP_THEME
+    volumes:
+      - /docker/prowlarr/config:/config
+    ports:
+      - 9696:9696
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:sonarr
+      - TP_THEME
+    volumes:
+      - /docker/sonarr/config:/config
+      - /mnt/torrents/deluge:/downloads
+      - /mnt/media/TV Shows:/tv
+      - /mnt/media/Anime:/tv-anime
+    ports:
+      - 8989:8989
+    depends_on:
+      - prowlarr
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:radarr
+      - TP_THEME
+    volumes:
+      - /docker/radarr/config:/config
+      - /mnt/torrents/deluge:/downloads
+      - /mnt/media:/movies
+    ports:
+      - 7878:7878
+    depends_on:
+      - prowlarr
+
+  plex:
+    image: lscr.io/linuxserver/plex:latest
+    container_name: plex
+    restart: always
+    environment:
+      - PUID
+      - PGID
+    volumes:
+      - /docker/plex/config:/config
+      - /mnt/media:/content
+    ports:
+      - 32400:32400
+
+  dizquetv:
+    image: vexorian/dizquetv:1.5.0
+    container_name: dizquetv
+    restart: unless-stopped
+    volumes:
+      - dizquetv-data:/home/node/app/.dizquetv
+    ports:
+      - 32500:8000
+
+  lidarr:
+    image: lscr.io/linuxserver/lidarr:latest
+    container_name: lidarr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:lidarr
+      - TP_THEME
+    volumes:
+      - /docker/lidarr/config:/config
+      - /mnt/torrents/deluge:/downloads
+      - /mnt/media/Music:/music
+    ports:
+      - 8686:8686
+
+  overseerr:
+    image: lscr.io/linuxserver/overseerr:latest
+    container_name: overseerr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+      - LOG_LEVEL=INFO
+    volumes:
+      - ${CONFIG_FOLDER}/overseerr/config:/config
+    ports:
+      - 5055:5055
+
+  requestrr:
+    image: lscr.io/linuxserver/requestrr:latest
+    container_name: requestrr
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+    volumes:
+      - /docker/requestrr/config:/config
+    ports:
+      - 4545:4545
+
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    restart: unless-stopped
+    environment:
+      - TZ
+      - PUID
+      - PGID
+    volumes:
+      - /docker/tautulli/config:/config
+    ports:
+      - 8181:8181
+
+volumes:
+  dizquetv-data:
+    external: false
