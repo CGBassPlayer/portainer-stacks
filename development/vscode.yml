@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  code-server:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    restart: unless-stopped
+    environment:
+      - PUID
+      - PGID
+      - TZ
+      - SUDO_PASSWORD=${CODE_SERVER_SUDO_PASSWORD}
+    volumes:
+      - /docker/vscode-server/config:/config
+      - /docker/vscode-server/workspaces:/workspaces
+    ports:
+      - 7443:8443
