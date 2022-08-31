@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    restart: always
+    environment:
+      - PUID
+      - PGID
+      - TZ
+    volumes:
+      - /docker/heimdall/config:/config
+    ports:
+      - 8500:80
+      - 8501:443
+
+  librespeed:
+    image: lscr.io/linuxserver/librespeed:latest
+    container_name: librespeed
+    restart: unless-stopped
+    environment:
+      - PUID
+      - PGID
+      - TZ
+      - PASSWORD
+      - CUSTOM_RESULTS=false
+      - DB_TYPE=sqlite
+    volumes:
+      - /docker/librespeed/config:/config
+    ports:
+      8505:80
+
+  uptime_kuma:
+    image: 	louislam/uptime-kuma:1
+    container_name: uptime-kuma
+    restart: always
+    volumes:
+      - /docker/uptime-kuma/data:/app/data
+    ports:
+      - 3001:3001
+
+  baby_buddy:
+    image: lscr.io/linuxserver/babybuddy:latest
+    container_name: baby-buddy
+    restart: always
+    environment:
+      - PUID
+      - PGID
+      - TZ
+      - CSRF_TRUSTED_ORIGINS
+    volumes:
+      /docker/babybuddy/config:/config
+    ports:
+      - 6212:8000

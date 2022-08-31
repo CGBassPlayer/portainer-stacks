@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  bookstack:
+    image: ghcr.io/linuxserver/bookstack:latest
+    container_name: bookstack
+    restart: unless-stopped
+    environment:
+      - PUID
+      - PGID
+      - DB_HOST=bookstack_postgres
+      - DB_DATABASE=bookstack
+      - DB_USER
+      - DB_PASS
+      - APP_URL
+    volumes:
+      - /docker/bookstack/config:/config
+    ports:
+      - 6875:80
+
+  bookstack_db:
+    image: postgres:latest
+    container_name: bookstack_postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASS}
+    volumes:
+      - bookstack_postgres_data:/var/lib/postgres/data
