@@ -9,7 +9,7 @@ services:
       - PUID
       - PGID
       - TZ
-      - SUDO_PASSWORD=${CODE_SERVER_SUDO_PASSWORD}
+      - SUDO_PASSWORD
     volumes:
       - /docker/vscode-server/config:/config
       - /docker/vscode-server/workspaces:/workspaces
