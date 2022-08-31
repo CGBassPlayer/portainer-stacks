@@ -18,8 +18,8 @@ services:
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
-      - "8585:3000"
-      - "222:22"
+      - 8585:3000
+      - 222:22
     depends_on:
       - db
 
@@ -28,9 +28,9 @@ services:
     container_name: gitea_db
     restart: always
     environment:
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
-      - POSTGRES_DB
+      - POSTGRES_USER=${GITEA_POSTGRES_USER}
+      - POSTGRES_PASSWORD=${GITEA_POSTGRES_PASSWORD}
+      - POSTGRES_DB=${GITEA_POSTGRES_DB}
     volumes:
       - gitea_postgres:/var/lib/postgresql/data
 
