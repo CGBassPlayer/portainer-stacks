@@ -142,6 +142,8 @@ services:
       - TZ
       - PUID
       - PGID
+      - DOCKER_MODS=ghcr.io/gilbn/theme.park:tautulli
+      - TP_THEME
     volumes:
       - /docker/tautulli/config:/config
     ports:
