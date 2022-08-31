@@ -4,19 +4,22 @@ Stacks I use in my portainer instance. They are all docker compose fiels so port
 
 ## Media
 
-* [File Browser]()
-* [Prowlarr]()
-* [Sonarr]()
-* [Radarr]()
-* [Plex]()
-* [DizqueTV]()
-* [Lidarr]()
-* [Overseer]()
-* [Requestrr]()
-* [Tautulli]()
+* File Browser
+* Prowlarr
+* Sonarr
+* Radarr
+* Plex
+* DizqueTV
+* Lidarr
+* Overseer
+* Requestrr
+* Tautulli
 
 ## Development
 
-* [Gitea]()
-* [Jenkins]()
-* [VSCode]()
+* Gitea
+* Jenkins
+* VSCode
+* Oracle XE
+* Postgres
+* MS SQL Server
