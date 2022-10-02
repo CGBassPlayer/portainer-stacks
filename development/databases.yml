@@ -10,6 +10,8 @@ services:
       - SA_PASSWORD
     ports:
       - 1433:1433
+    volumes:
+      ms_sql_data:/var/opt/mssql
 
   postgres:
     image: postgres:latest
@@ -23,15 +25,23 @@ services:
     ports:
       - 5432:5432
 
-  oracle_11g:
-    image: oracleinanutshell/oracle-xe-11g:latest
-    container_name: oracle_11g
+  oracle_19c:
+    iamge: banglamon/oracle193db:19.3.0-ee
+    container_name: oracle_19c
     restart: always
     environment:
-      - ORACLE_ALLOW_REMOTE=true
+      - ORACLE_SID
+      - ORACLE_PDB
+      - ORACLE_PWD
     ports:
-      - 1521:1521
+      1521:1521
+    volumes:
+      - oracle19c_data:/opt/oracle/oradata
 
 volumes:
+  ms_sql_data:
+    driver: local
   postgres_data:
+    driver: local
+  oracle19c_data:
     driver: local
