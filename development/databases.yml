@@ -8,10 +8,10 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD
-    ports:
-      - 1433:1433
     volumes:
       ms_sql_data:/var/opt/mssql
+    ports:
+      - 1433:1433
 
   postgres:
     image: postgres:latest
@@ -33,10 +33,10 @@ services:
       - ORACLE_SID
       - ORACLE_PDB
       - ORACLE_PWD
-    ports:
-      1521:1521
     volumes:
       - oracle19c_data:/opt/oracle/oradata
+    ports:
+      1521:1521
 
 volumes:
   ms_sql_data:
