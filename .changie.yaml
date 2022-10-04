@@ -14,6 +14,6 @@ kinds:
 - label: Fixed
 - label: Security
 newlines:
-  afterChangelogHeader: 1
+  afterChangelogHeader: 0
   beforeChangelogVersion: 1
   endOfVersion: 1
