@@ -1,0 +1,52 @@
+version: '3.9'
+services:
+  homeassistant:
+    container_name: home-assistant
+    image: homeassistant/home-assistant:stable
+    restart: always
+    network_mode: host
+    environment:
+      - TZ
+    volumes:
+      - /docker/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /dev/serial/by-id:/dev/serial/by-id
+    ports:
+      - 8123:8123
+    devices:
+      - /dev/ttyUSB0:/dev/ttyUSB0
+
+  frigate:
+    image: blakeblackshear/frigate:stable
+    container_name: frigate
+    restart: unless-stopped
+    # shm-size: "128mb" # Lacking permissions to change shm size so leaving default for now
+    environment:
+      - FRIGATE_RTSP_PASSWORD
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /docker/frigate/config.yml:/config/config.yml:ro
+      - /mnt/media/cctv:/media/frigate
+      - type: tmpfs # Optional: 1GB of memory, reduces SSD/SD Card wear
+        target: /tmp/cache
+        tmpfs:
+          size: 1000000000
+    ports:
+      - 5000:5000
+      - 1935:1935 # RTMP feeds
+
+    # devices:
+      # - /dev/bus/usb:/dev/bus/usb # passes the USB Coral, needs to be modified for other versions
+      # - /dev/apex_0:/dev/apex_0 # passes a PCIe Coral, follow driver instructions here https://coral.ai/docs/m2/get-started/#2a-on-linux
+      # - /dev/dri/renderD128 # for intel hwaccel, needs to be updated for your hardware
+
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt-server
+    restart: always
+    volumes:
+      - /docker/mqtt/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /docker/mqtt/data:/mosquitto/data
+      - /docker/mqtt/logs:/mosquitto/log
+    ports:
+      - 1883:1883
